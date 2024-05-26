@@ -1,0 +1,59 @@
+@startuml
+
+class Client {
+    Long id
+    String name
+    String email
+    List<Project> projects
+}
+
+class Project {
+    Long id
+    String name
+    StatusProject status
+    Client client
+    List<Team> teams
+    List<Task> tasks
+}
+
+class Task {
+    Long id
+    String title
+    String description
+    Project project
+    Worker assignedWorker
+}
+
+class Team {
+    UUID id
+    String name
+    List<Project> projects
+    List<Worker> workers
+}
+
+class Worker {
+    Long id
+    String firstName
+    String lastName
+    String role
+    List<Team> teams
+}
+
+enum StatusProject {
+    PLANNING
+    IN_PROGRESS
+    COMPLETED
+    ON_HOLD
+    CANCELLED
+}
+
+Client "1" --> "0..*" Project : has
+Project "0..*" --> "1" Client : belongs to
+Project "0..*" --> "0..*" Team : assigned to
+Team "0..*" --> "0..*" Project : works on
+Project "1" --> "0..*" Task : has
+Task "0..*" --> "1" Project : belongs to
+Task "0..*" --> "0..1" Worker : assigned to
+Worker "0..*" --> "0..*" Team : member of
+
+@enduml
